@@ -1,5 +1,6 @@
 // @ts-check
 import getGroupedResults from './getGroupedResults';
+import getTupleGroupedSeriesResults from './getTupleGroupedSeriesResults';
 
 /**
  * @typedef {Object} GroupResult
@@ -9,12 +10,12 @@ import getGroupedResults from './getGroupedResults';
  */
 
 /**
- * @param {GroupResult[][]} seriesResults
+ * @param {GroupResult[][][]} seriesResults
  * @returns {{[groupId: string]: { groupId: string, name: string, count: number }}[]}
  */
-const getValueGroupedSeriesResults = (seriesResults) => {
+const getValueGroupedSeriesResults = (seriesResults, optionKey) => {
   return seriesResults.map((seriesResult) => {
-    return getGroupedResults(seriesResult);
+    return getGroupedResults(seriesResult[0], optionKey);
   });
 };
 

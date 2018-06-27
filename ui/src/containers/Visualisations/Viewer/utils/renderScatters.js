@@ -28,7 +28,8 @@ const renderScatters = (props) => {
       <Scatter
         name={label}
         data={values(groupedSeriesResults[seriesIndex])}
-        fill={colour} />
+        fill={colour}
+        key={`scatter${seriesIndex}`} />
     );
   });
 };

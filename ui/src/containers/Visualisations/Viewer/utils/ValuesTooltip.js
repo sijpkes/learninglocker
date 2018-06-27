@@ -14,10 +14,10 @@ export default withStyles(styles)(
   (props) => {
     const { display, payload, label } = props;
     return (
-      <div className={styles.customTooltip}>
-        <div className={styles.label}>{display(label)}</div>
+      <div className={styles.customTooltip} key={`toolT${(Math.random() * 100)}`}>
+        <div className={styles.label}  key={`toolTB${(Math.random() * 100)}`}>{display(label)}</div>
         {payload.map(({ name, value }) => {
-          return <div className={styles.value}>{name} - {value}</div>;
+          return <div className={styles.value} key={`toolTB${value}`}>{name} - {value}</div>;
         })}
       </div>
     );

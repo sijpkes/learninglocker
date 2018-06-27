@@ -33,7 +33,8 @@ export default compose(
     const { model, results } = props;
     const newModel = migrateCounterModel(model);
     const config = newModel.config;
-    const count = get(results, [0, 0, 'count'], 0);
+    const count = get(results, [0, 0, 0, 'count'], 0);
+    //Average of Statements returns null breaks 'toLocaleString'
     const color = config.value.colour;
 
     return (

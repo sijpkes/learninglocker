@@ -21,7 +21,7 @@ const up = async () => {
 
     const shareable = dashboard.shareable;
     shareable.unshift({
-      title: '~ Shareable',
+      title: 'Shareable',
       filter: dashboard.filter,
       visibility: dashboard.visibility,
       validDomains: dashboard.validDomains,

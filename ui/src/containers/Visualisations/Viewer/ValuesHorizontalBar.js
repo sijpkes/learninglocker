@@ -2,13 +2,14 @@
 import React from 'react';
 import { compose, withState } from 'recompose';
 import { BarChart, XAxis, YAxis, Bar, Legend, Tooltip } from 'recharts';
-import { union } from 'lodash';
+import { union, get } from 'lodash';
 import { AutoSizer } from 'react-virtualized';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 // @ts-ignore
 import { withStatementsVisualisation } from 'ui/utils/hocs';
 import getSeriesDataKey from './utils/getSeriesDataKey';
 import getValueGroupedSeriesResults from './utils/getValueGroupedSeriesResults';
+import getFormattedResults from 'ui/utils/visualisationResults/getFormattedResults';
 import getValueGroupDictionary from './utils/getValueGroupDictionary';
 import renderBars from './utils/renderBars';
 import ValuesTooltip from './utils/ValuesTooltip';
@@ -52,12 +53,13 @@ export default compose(
   withStatementsVisualisation,
   withState('page', 'setPage', 0),
 )(
-  /**  @param {{ model: Model, results: GroupResult[][], page: number, setPage: (page: number) => void }} props */
+  /**  @param {{ model: Model, results: GroupResult[][][], page: number, setPage: (page: number) => void }} props */
   (props) => {
     const { model, results, page, setPage } = props;
     const newModel = migrateValuesModel(model);
     const config = newModel.config;
-    const groupedSeriesResults = getValueGroupedSeriesResults(results);
+    const optionKey = model.getIn(['axesgroup','optionKey'], null)
+    const groupedSeriesResults = getValueGroupedSeriesResults(results, optionKey);
     const groupDictionary = getValueGroupDictionary(groupedSeriesResults);
     const chartDataEntries = getSortedValueChartEntries(groupDictionary, groupedSeriesResults);
     const chartPageDataEntries = chartDataEntries.slice(page * groupsPerPage);
@@ -67,7 +69,6 @@ export default compose(
     const hasNextPage = chartDataEntries.length > ((page + 1) * groupsPerPage);
     const minValue = 0;
     const maxValue = 100;
-
     return (
       <div className={styles.chart}>
         <div className={`${styles.buttons}`}>
@@ -82,9 +83,9 @@ export default compose(
         </div>
         <Chart xAxisLabel={config.value.label} yAxisLabel={config.group.label}>
           {({ height, width }) => (
-            <BarChart layout="vertical" data={chartPageDataEntries} width={width} height={height}>
+            <BarChart layout="vertical" data={getFormattedResults(optionKey, chartDataEntries)} width={width} height={height}>
               <YAxis type="category" dataKey="groupId" tickFormatter={getGroupAxisLabel} width={90} />
-              <XAxis type="number" domain={[minValue, maxValue]} />
+              <XAxis type="number" />
               <Legend />
               {renderBars({ config })}
               <Tooltip content={<ValuesTooltip display={getGroupTooltipLabel} />} />;

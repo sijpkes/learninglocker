@@ -7,7 +7,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { compose } from 'recompose';
 // @ts-ignore
 import { withStatementsVisualisation } from 'ui/utils/hocs';
-import getSeriesDataKey from './utils/getSeriesDataKey';
+import getFormattedResults from 'ui/utils/visualisationResults/getFormattedResults';
 import getValueGroupedSeriesResults from './utils/getValueGroupedSeriesResults';
 import getValueGroupDictionary from './utils/getValueGroupDictionary';
 import renderBars from './utils/renderBars';
@@ -45,26 +45,24 @@ export default compose(
   withStyles(styles),
   withStatementsVisualisation,
 )(
-  /**  @param {{ model: Model, results: GroupResult[][] }} props */
+  /**  @param {{ model: Model, results: GroupResult[][][] }} props */
   (props) => {
     const { model, results } = props;
+    const optionKey = model.getIn(['axesgroup','optionKey'], null)
     const newModel = migrateValuesModel(model);
     const config = newModel.config;
-    const groupedSeriesResults = getValueGroupedSeriesResults(results);
+    const groupedSeriesResults = getValueGroupedSeriesResults(results, optionKey);
     const groupDictionary = getValueGroupDictionary(groupedSeriesResults);
     const chartDataEntries = getValueChartEntries(groupDictionary, groupedSeriesResults);
     const getGroupAxisLabel = createGroupAxisLabeller(groupDictionary);
     const getGroupTooltipLabel = createGroupTooltipLabeller(groupDictionary);
-    const minValue = 0;
-    const maxValue = 100;
-
     return (
       <div className={styles.chart}>
         <Chart xAxisLabel={config.group.label} yAxisLabel={config.value.label}>
           {({ height, width }) => (
-            <BarChart layout="horizontal" data={chartDataEntries} width={width} height={height}>
+            <BarChart layout="horizontal" data={getFormattedResults(optionKey, chartDataEntries)} width={width} height={height}>
               <XAxis type="category" dataKey="groupId" tickFormatter={getGroupAxisLabel} />
-              <YAxis type="number" domain={[minValue, maxValue]} />
+              <YAxis type="number" />
               <Legend />
               {renderBars({ config })}
               <Tooltip content={<ValuesTooltip display={getGroupTooltipLabel} />} />;

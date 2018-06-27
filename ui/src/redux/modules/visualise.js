@@ -1,4 +1,4 @@
-import { List, Map } from 'immutable';
+import { List, Map, fromJS } from 'immutable';
 import { createSelector } from 'reselect';
 import { take, takeEvery, put, fork, select } from 'redux-saga/effects';
 import { identity } from 'lodash';
@@ -321,7 +321,12 @@ export function* fetchVisualisationSaga(state, id) {
       const pipelines = series.get(s);
       for (let p = 0; p < pipelines.size; p += 1) {
         const shouldFetch = shouldFetchPipeline(pipelines.get(p), state);
-        if (shouldFetch) yield put(fetchAggregation({ pipeline: pipelines.get(p) }));
+        if (shouldFetch) {
+          yield put(fetchAggregation({
+            pipeline: pipelines.get(p),
+            mapping: fromJS,
+          }));
+        }
       }
     }
   }

@@ -8,6 +8,7 @@ import { compose } from 'recompose';
 // @ts-ignore
 import { withStatementsVisualisation } from 'ui/utils/hocs';
 import getSeriesDataKey from './utils/getSeriesDataKey';
+import getFormattedResults from 'ui/utils/visualisationResults/getFormattedResults';
 import getValueGroupedSeriesResults from './utils/getValueGroupedSeriesResults';
 import getValueGroupDictionary from './utils/getValueGroupDictionary';
 import renderLines from './utils/renderLines';
@@ -49,9 +50,12 @@ export default compose(
     const { model, results } = props;
     const newModel = migrateValuesModel(model);
     const config = newModel.config;
-    const groupedSeriesResults = getValueGroupedSeriesResults(results);
+    const optionKey = model.getIn(['axesgroup','optionKey'], null)
+    const groupedSeriesResults = getValueGroupedSeriesResults(results, optionKey);
     const groupDictionary = getValueGroupDictionary(groupedSeriesResults);
-    const chartDataEntries = getSortedValueChartEntries(groupDictionary, groupedSeriesResults);
+    const formatForPie = true;
+    // sorry
+    const chartDataEntries = getSortedValueChartEntries(groupDictionary, groupedSeriesResults, formatForPie);
     const getGroupAxisLabel = createGroupAxisLabeller(groupDictionary);
     const getGroupTooltipLabel = createGroupTooltipLabeller(groupDictionary);
 
@@ -63,7 +67,7 @@ export default compose(
               data={chartDataEntries}
               nameKey={'groupId'}
               valueKey={getSeriesDataKey(0)}
-              fill={config.series[0].colour}
+              fill={'config.series[0].colour'}
               outerRadius={150}>
             </Pie>
             <Tooltip content={<PieTooltip display={getGroupTooltipLabel} />} />;
