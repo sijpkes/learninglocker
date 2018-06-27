@@ -1,0 +1,18 @@
+Have got as far as i could without Ryan, was asked to go do some work on Cur8r with mac (cur8r?? for 2019?)
+Anyway..
+
+Wierd issue with Pie, have reformatted the data correctly. Needs to be refactored back into the structure of the overall refactor, but for 
+now it presents what should be the correct data format according to docs ( [{name:'slice',value:100},{name:'blah',value:200}] )
+Ryan - I have a feeling you found the solution to a similar SVG issue yesterday .. maybe i'm missing something
+
+Scatter is causing a wierd crash.
+Counter has an error with Average of statements when returning null breaks 'toLocaleString'
+
+Most of the work was on /Users/danstein/HT2LABS/learninglocker/ui/src/utils/visualisationResults/getFormattedResults.js
+and
+/Users/danstein/HT2LABS/learninglocker/ui/src/containers/Visualisations/Viewer/utils/getGroupedResults.js
+have tried to work around the existing functions.
+
+Lots left to do but be great if someone can look at pie and line issue? : )
+
+bye.
