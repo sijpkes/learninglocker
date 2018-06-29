@@ -13,28 +13,27 @@
  */
 
 const findName = (name, optionKey) => {
-  if (optionKey == "people") {
+  if (optionKey === 'people') {
     switch (true) {
-      case name.hasOwnProperty('account'): 
+      case name.hasOwnProperty('account'):
         return name.account.name;
       case name.hasOwnProperty('openid'):
         return name.openid;
       case name.hasOwnProperty('mbox'):
-        return name.mbox; 
+        return name.mbox;
       case name.hasOwnProperty('mbox_sha1sum'):
-        return name.mbox_sha1sum;  
-      default: return name; 
+        return name.mbox_sha1sum;
+      default: return name;
     }
   } else {
-    return name
+    return name;
   }
-}
+};
 const getGroupedResults = (groupResults, optionKey) => {
   return groupResults.reduce((groupedSeriesResult, groupResult) => {
     const { _id: groupId, count } = groupResult;
     const name = findName(groupResult.model, optionKey)
     groupedSeriesResult[groupResult._id] = { groupId, name, count };
-    console.log('gsr',groupedSeriesResult)
     return groupedSeriesResult;
   }, {});
 };

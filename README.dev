@@ -7,6 +7,7 @@ Ryan - I have a feeling you found the solution to a similar SVG issue yesterday 
 
 Scatter is causing a wierd crash.
 Counter has an error with Average of statements when returning null breaks 'toLocaleString'
+Some kind of wierd component lifecyle issue causing rerendering at each stage of save.
 
 Most of the work was on /Users/danstein/HT2LABS/learninglocker/ui/src/utils/visualisationResults/getFormattedResults.js
 and
