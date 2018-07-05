@@ -6,6 +6,7 @@ import DownloadListItem from 'ui/components/DownloadListItem';
 import { withSchema, withModel } from 'ui/utils/hocs';
 import { activeOrgIdSelector } from 'ui/redux/modules/router';
 import { connect } from 'react-redux';
+import { SITE_SETTINGS_ID } from 'lib/constants/siteSettings';
 
 class ExportDownloadManager extends Component {
   static propTypes = {
@@ -26,7 +27,7 @@ class ExportDownloadManager extends Component {
           <DownloadListItem
             key={id}
             model={model}
-            exporationExport={this.props.organisation.getIn(['settings', 'EXPIRE_EXPORTS'])}
+            expireExport={this.props.siteSettings.get('expireExports', false) && this.props.organisation.getIn(['settings', 'EXPIRE_EXPORTS'])}
             deleteModel={this.props.deleteModel} />
         ).valueSeq() }
       </div>
@@ -46,6 +47,15 @@ export default compose(
   withModel,
   withProps(({ model }) => ({
     organisation: model
+  })),
+
+  withProps(() => ({
+    schema: 'siteSettings',
+    id: SITE_SETTINGS_ID
+  })),
+  withModel,
+  withProps(({ model }) => ({
+    siteSettings: model
   })),
 
   withSchema('download'),

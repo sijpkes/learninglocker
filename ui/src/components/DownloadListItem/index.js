@@ -7,16 +7,24 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import createdAt from 'ui/containers/Owner/CreatedAt';
 
-const DownloadListItem = (props) => {
-  const { download, deleteDownloadModel, exporationExport } = props;
-
-  const expireExports = moment(download.get('time')).add(exporationExport.get('ttl'), 'seconds');
+export const expireExportFormatter = (expireExport, createdAtValue) => {
+  if (!expireExport) {
+    return '';
+  }
+  const expireExports = moment(createdAtValue).add(expireExport.get('ttl'), 'seconds');
   const formattedExpireExports = createdAt(expireExports, 'Expires');
+  return ` - (${formattedExpireExports})`;
+};
+
+const DownloadListItem = (props) => {
+  const { download, deleteDownloadModel, expireExport } = props;
+
+  const formattedExpireExports = expireExportFormatter(expireExport, download.get('time'));
 
   if (download.get('isReady')) {
     return (
       <OptionListItem
-        label={`${download.get('name')} - (${formattedExpireExports})`}
+        label={`${download.get('name')}${formattedExpireExports}`}
         href={download.get('url')}
         target="_blank"
         rel="noreferrer noopener"
