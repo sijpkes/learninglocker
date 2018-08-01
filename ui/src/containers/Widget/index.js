@@ -11,6 +11,7 @@ import { activeOrgIdSelector } from 'ui/redux/modules/router';
 import Link from 'ui/containers/Link';
 import DropDownMenu from 'ui/components/DropDownMenu';
 import WidgetVisualisePicker from 'ui/containers/WidgetVisualisePicker';
+import SourceResults from 'ui/containers/VisualiseResults/SourceResults';
 import VisualiseResults from 'ui/containers/VisualiseResults';
 import DeleteConfirm from 'ui/containers/DeleteConfirm';
 import styles from './widget.css';
@@ -116,7 +117,9 @@ class Widget extends Component {
   }
 
   render = () => {
+    
     const { model } = this.props;
+    console.log('​Widget -> render -> this.props', this.props);
     const delPopupProps = {
       schema,
       onClickClose: this.closeDeleteModal,
@@ -150,9 +153,15 @@ class Widget extends Component {
               }
             </div>
           </div>
+
+           {/* {!this.props.source && <VisualiseResults id={model.get('visualisation')} />}
+          {this.props.source &&
+            <SourceResults id={model.get('visualisation')} />
+          } */}
+
           <div className={`panel-body ${styles.body}`}>
             { model.has('visualisation') &&
-              <VisualiseResults id={model.get('visualisation')} />
+             <SourceResults id={model.get('visualisation')} />
             }
           </div>
           {
